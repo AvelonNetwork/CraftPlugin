@@ -1,0 +1,30 @@
+{# @var plugin \avelonnetwork\craftavelon\Plugin #}
+{# @var settings \avelonnetwork\craftavelon\models\Settings #}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% if currentUser.admin %}
+
+	{{ forms.textField({
+		label: 'Account ID',
+		instructions: 'The ID of the account',
+		id: 'accountId',
+		name: 'accountId',
+		value: settings.accountId,
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: 'Bearer Token',
+		instructions: 'The Bearer Token',
+		id: 'bearerToken',
+		name: 'bearerToken',
+		value: settings.bearerToken,
+		required: true
+	}) }}
+
+{% else %}
+
+	<p>Only admins can edit these settings.</p>
+
+{% endif %}
