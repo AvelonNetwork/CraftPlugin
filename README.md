@@ -4,7 +4,7 @@
 
 ## Requirements
 
-This plugin requires Craft CMS 4.4.13 or later, and PHP 8.0.2 or later.
+This plugin requires Craft CMS 4.0.0 or later, and PHP 7.4 or later.
 
 ## Installation
 
