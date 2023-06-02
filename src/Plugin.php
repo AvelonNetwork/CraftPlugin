@@ -52,23 +52,6 @@ class Plugin extends BasePlugin
                 $event->rules['avelon'] = 'avelon/settings/get-settings';
             }
         );
-
-        // $data = [
-        //     'transaction_id' => '3',
-        //     'currency' => 'GBP',
-        //     'items' => array(
-        //         [
-        //             'item_price' => floatval(round(9.99, 2)),
-        //             'item_id' => '001',
-        //             'item_name' => 'product 1',
-        //             'item_category' => 'Product type',
-        //             'item_quantity' => intval(3),
-        //             'item_metadata' => '{}',
-        //         ]
-        //     )
-        // ];
-
-        // $this->avelonService->postToApi($data);
     }
 
     private function attachEventHandlers(): void
@@ -77,11 +60,15 @@ class Plugin extends BasePlugin
             View::class,
             View::EVENT_BEFORE_RENDER_TEMPLATE,
             function (TemplateEvent $event) {
-                $settings = $this->avelonService->getSettings();
-                $accountId = $settings['accountId'];
+                if (!Craft::$app->getRequest()->getIsCpRequest()) {
+                    $settings = $this->avelonService->getSettings();
+                    if ($settings) {
+                        $accountId = $settings['accountId'];
 
-                if ($accountId) {
-                    Craft::$app->view->registerJsFile('https://' . $accountId . '.avln.me/t.js', ['position' => Craft::$app->view::POS_HEAD, 'async' => true, 'defer' => true]);
+                        if ($accountId) {
+                            Craft::$app->view->registerJsFile('https://' . $accountId . '.avln.me/t.js', ['position' => Craft::$app->view::POS_HEAD, 'async' => true, 'defer' => true]);
+                        }
+                    }
                 }
             }
         );
