@@ -14,6 +14,9 @@ use yii\base\Component;
  */
 class AvelonService extends Component
 {
+
+    // public functions
+
     public function getAvelonCookie()
     {
         $cookie = $_COOKIE['avln_cid'] ?? null;
@@ -22,6 +25,7 @@ class AvelonService extends Component
         }
         return null;
     }
+
 
     public function formatOrder(Event $event)
     {
@@ -49,12 +53,13 @@ class AvelonService extends Component
         $formatedOrder = [
             "transaction_id" => $order->id,
             "currency" => $order->paymentCurrency,
-            "promo_code" => [$order->couponCode],
+            "promo_codes" => [$order->couponCode],
             "items" => $items,
         ];
 
         return $formatedOrder;
     }
+
 
     public function getSettings()
     {
@@ -72,6 +77,7 @@ class AvelonService extends Component
         return $settingsJson;
     }
 
+
     public function setSettings($params)
     {
         $record = $this->getSettingsRow();
@@ -85,6 +91,7 @@ class AvelonService extends Component
         $record->bearerToken = $params['bearerToken'];
         $record->save();
     }
+
 
     public function postToApi($data)
     {
@@ -103,7 +110,7 @@ class AvelonService extends Component
         $dataJson = $this->jsonEncode($data);
 
         // if the avln_cid cookie exists or there are promo codes, post to the api
-        if ($avlnCid || count($data['promoCodes']) > 0) {
+        if ($avlnCid || count($data['promo_codes']) > 0) {
             try {
                 $client = new \GuzzleHttp\Client();
 
@@ -120,7 +127,7 @@ class AvelonService extends Component
                     ]
                 );
 
-                // if the status code is not 201, log the error
+                // if the status code is not 201, log the info
                 if ($repsonse->getStatusCode() != 201) {
                     $this->logErrors('info', [
                         'status' => $repsonse->getStatusCode(),
@@ -134,6 +141,7 @@ class AvelonService extends Component
         }
     }
 
+
     // Private functions
 
     private function getBearerToken()
@@ -141,6 +149,7 @@ class AvelonService extends Component
         $settings = $this->getSettings();
         return $settings['bearerToken'];
     }
+
 
     private function jsonEncode($data)
     {
@@ -160,6 +169,7 @@ class AvelonService extends Component
         return $dataJson;
     }
 
+
     private function logErrors($type, $response)
     {
         if ($type == 'info') {
@@ -168,6 +178,7 @@ class AvelonService extends Component
             Craft::error($response, 'Avelon Plugin Error');
         }
     }
+
 
     private function getSettingsRow()
     {
