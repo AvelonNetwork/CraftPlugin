@@ -80,8 +80,12 @@ class Plugin extends BasePlugin
                 // get and format order data
                 $data = $this->avelonService->formatOrder($event);
 
-                // post the data to the api
-                $this->avelonService->postToApi($data);
+                if ($data && $data !== []) {
+                    // post the data to the api
+                    $this->avelonService->postToApi($data);
+                } else {
+                    Craft::error('Avelon: Order data could not be formatted', 'Avelon Plugin Error');
+                }
             }
         );
     }

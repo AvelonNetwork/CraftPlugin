@@ -160,6 +160,7 @@ class AvelonService extends Component
         if (version_compare(phpversion(), '7.1', '>=')) {
             ini_set('serialize_precision', -1);
         }
+
         // encode the data to json
         $dataJson = json_encode($data);
 
@@ -170,12 +171,12 @@ class AvelonService extends Component
     }
 
 
-    private function logErrors($type, $response)
+    private function logErrors($type, $message)
     {
         if ($type == 'info') {
-            Craft::info($response, 'Avelon Plugin Message');
+            Craft::info($message, 'Avelon Plugin Message');
         } else if ($type == 'error') {
-            Craft::error($response, 'Avelon Plugin Error');
+            Craft::error($message, 'Avelon Plugin Error');
         }
     }
 
