@@ -1,0 +1,38 @@
+{% extends "_layouts/cp.twig" %}
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Settings"|t('plugin-handle') %}
+{% set fullPageForm = true %}
+
+{% block content %}
+
+	{{ actionInput('avelon/settings/save-settings') }}
+    {{ redirectInput('avelon/settings/get-settings') }}
+
+	{% if currentUser.admin %}
+
+		{{ forms.textField({
+			label: 'Account ID',
+			instructions: 'The ID of the account',
+			id: 'accountId',
+			name: 'accountId',
+			value: settings.accountId ?? null,
+			required: true
+		}) }}
+
+		{{ forms.textField({
+			label: 'Bearer Token',
+			instructions: 'The Bearer Token',
+			id: 'bearerToken',
+			name: 'bearerToken',
+			value: settings.bearerToken ?? null,
+			required: true
+		}) }}
+
+	{% else %}
+
+		<p>Only admins can edit these settings.</p>
+
+	{% endif %}
+
+{% endblock %}
