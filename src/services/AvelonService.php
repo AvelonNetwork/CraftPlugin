@@ -75,7 +75,7 @@ class AvelonService extends Component
 				];
 
 				if ($order->couponCode) {
-					$formatedOrder['promo_codes'] = $order->couponCode;
+					$formatedOrder['promo_codes'] = [$order->couponCode];
 				}
 
 				return $formatedOrder;
