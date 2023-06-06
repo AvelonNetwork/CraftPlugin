@@ -5,9 +5,7 @@
     "support": {
         "email": "hello@avelonetwork.com",
         "issues": "https://github.com/git@github.com:avelonnetwork/craftplugin.git/issues?state=open",
-        "source": "https://github.com/git@github.com:avelonnetwork/craftplugin.git",
-        "docs": "https://github.com/git@github.com:avelonnetwork/craftplugin.git",
-        "rss": "https://github.com/git@github.com:avelonnetwork/craftplugin.git/releases.atom"
+        "source": "https://github.com/git@github.com:avelonnetwork/craftplugin.git"
     },
     "require": {
         "php": ">=7.4",
@@ -26,8 +24,7 @@
     "extra": {
         "handle": "avelon",
         "name": "Avelon Network",
-        "developer": "Avelon Network",
-        "documentationUrl": "https://github.com/git@github.com:avelonnetwork/craftplugin.git"
+        "developer": "Avelon Network"
     },
     "scripts": {
         "check-cs": "ecs check --ansi",

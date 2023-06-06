@@ -17,6 +17,7 @@ class SettingsController extends Controller
 
 	/**
 	 * avelon/settings action
+	 * @return Response
 	 */
 	public function actionGetSettings(): Response
 	{
@@ -29,6 +30,10 @@ class SettingsController extends Controller
 		return $this->renderTemplate('avelon/settings-index', $variables);
 	}
 
+	/**
+	 * avelon/settings/save-settings action
+	 *
+	 */
 	public function actionSaveSettings()
 	{
 		$this->requireLogin();
@@ -36,5 +41,6 @@ class SettingsController extends Controller
 
 		$params = Craft::$app->request->getBodyParams();
 		Plugin::getInstance()->avelonService->setSettings($params);
+		Craft::$app->getSession()->setNotice("Settings saved successfully.");
 	}
 }
