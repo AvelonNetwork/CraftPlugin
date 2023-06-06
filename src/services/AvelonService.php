@@ -71,9 +71,12 @@ class AvelonService extends Component
                 $formatedOrder = [
                     "transaction_id" => $order->id,
                     "currency" => $order->paymentCurrency,
-                    "promo_codes" => [$order->couponCode],
                     "items" => $items,
                 ];
+
+                if ($order->couponCode) {
+                    $formatedOrder['promo_codes'] = [$order->couponCode];
+                }
 
                 return $formatedOrder;
             } else {
@@ -149,6 +152,8 @@ class AvelonService extends Component
             $data['avln_cid'] = $avlnCid;
         }
 
+        $promoCodes = $data['promo_codes'] ?? null;
+
         // encode the data to json with correct precision
         $dataJson = $this->jsonEncode($data);
 
@@ -156,7 +161,7 @@ class AvelonService extends Component
         if ($accountId && $bearer_token) {
 
             // if the avln_cid cookie exists or there are promo codes, post to the api
-            if ($avlnCid || count($data['promo_codes']) > 0) {
+            if ($avlnCid || $promoCodes) {
                 try {
                     $client = new \GuzzleHttp\Client();
 
