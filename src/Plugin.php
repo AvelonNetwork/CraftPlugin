@@ -25,81 +25,77 @@ use yii\base\Event;
  */
 class Plugin extends BasePlugin
 {
-	// public string $schemaVersion = '1.0.0';
-	// public bool $hasCpSettings = false;
-	// public bool $hasCpSection = true;
+    /**
+     * @var string
+     */
+    public $schemaVersion = '1.0.0';
 
-	/**
-	 * @var string
-	 */
-	public $schemaVersion = '3.0.11';
+    /**
+     * @var bool
+     */
+    public $hasCpSection = true;
 
-	/**
-	 * @var bool
-	 */
-	public $hasCpSection = true;
-
-	/**
-	 * @var bool
-	 */
-	public $hasCpSettings = false;
+    /**
+     * @var bool
+     */
+    public $hasCpSettings = false;
 
 
 
-	public function init()
-	{
-		parent::init();
+    public function init()
+    {
+        parent::init();
 
-		// Install our event listeners
-		$this->attachEventHandlers();
+        // Install our event listeners
+        $this->attachEventHandlers();
 
 
-		$this->setComponents([
-			'avelonService' => AvelonService::class,
-		]);
+        $this->setComponents([
+            'avelonService' => AvelonService::class,
+        ]);
 
-		Event::on(
-			UrlManager::class,
-			UrlManager::EVENT_REGISTER_CP_URL_RULES,
-			function (RegisterUrlRulesEvent $event) {
-				$event->rules['avelon'] = 'avelon/settings/get-settings';
-			}
-		);
-	}
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_CP_URL_RULES,
+            function (RegisterUrlRulesEvent $event) {
+                $event->rules['avelon'] = 'avelon/settings/get-settings';
+            }
+        );
+    }
 
-	private function attachEventHandlers(): void
-	{
-		Event::on(
-			View::class,
-			View::EVENT_BEFORE_RENDER_TEMPLATE,
-			function (TemplateEvent $event) {
-				if (!Craft::$app->getRequest()->getIsCpRequest()) {
-					$settings = $this->avelonService->getSettings();
-					if ($settings) {
-						$accountId = $settings['accountId'];
+    private function attachEventHandlers(): void
+    {
+        Event::on(
+            View::class,
+            View::EVENT_BEFORE_RENDER_TEMPLATE,
+            function (TemplateEvent $event) {
+                if (!Craft::$app->getRequest()->getIsCpRequest()) {
+                    $settings = $this->avelonService->getSettings();
+                    if ($settings) {
+                        $accountId = $settings['accountId'];
 
-						if ($accountId) {
-							Craft::$app->view->registerJsFile('https://' . $accountId . '.avln.me/t.js', ['position' => Craft::$app->view::POS_HEAD, 'async' => true, 'defer' => true]);
-						}
-					}
-				}
-			}
-		);
+                        if ($accountId) {
+                            Craft::$app->view->registerJsFile('https://' . $accountId . '.avln.me/t.js', ['position' => Craft::$app->view::POS_HEAD, 'async' => true, 'defer' => true]);
+                        }
+                    }
+                }
+            }
+        );
 
-		Event::on(
-			Order::class,
-			Order::EVENT_AFTER_COMPLETE_ORDER,
-			function (Event $event) {
-				// get and format order data
-				$data = $this->avelonService->formatOrder($event);
+        Event::on(
+            Order::class,
+            Order::EVENT_AFTER_COMPLETE_ORDER,
+            function (Event $event) {
+                // get and format order data
+                $data = $this->avelonService->formatOrder($event);
 
-				if ($data && $data !== []) {
-					// post the data to the api
-					$this->avelonService->postToApi($data);
-				} else {
-					Craft::error('Avelon: Order data could not be formatted', 'Avelon Plugin Error');
-				}
-			}
-		);
-	}
+                if ($data && $data !== []) {
+                    // post the data to the api
+                    $this->avelonService->postToApi($data);
+                } else {
+                    Craft::error('Avelon: Order data could not be formatted', 'Avelon Plugin Error');
+                }
+            }
+        );
+    }
 }
