@@ -13,34 +13,40 @@ use avelonnetwork\craftavelon\Plugin;
  */
 class SettingsController extends Controller
 {
-	public $defaultAction = 'index';
+    public $defaultAction = 'index';
 
-	/**
-	 * avelon/settings action
-	 * @return Response
-	 */
-	public function actionGetSettings(): Response
-	{
-		$this->requireLogin();
+    /**
+     * @var    bool|array 
+     * @access protected
+     */
+    protected $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
 
-		$variables = [
-			'settings' => Plugin::getInstance()->avelonService->getSettings()
-		];
+    /**
+     * avelon/settings action
+     * @return Response
+     */
+    public function actionGetSettings(): Response
+    {
+        $this->requireLogin();
 
-		return $this->renderTemplate('avelon/settings-index', $variables);
-	}
+        $variables = [
+            'settings' => Plugin::getInstance()->avelonService->getSettings()
+        ];
 
-	/**
-	 * avelon/settings/save-settings action
-	 *
-	 */
-	public function actionSaveSettings()
-	{
-		$this->requireLogin();
-		$this->requirePostRequest();
+        return $this->renderTemplate('avelon/settings-index', $variables);
+    }
 
-		$params = Craft::$app->request->getBodyParams();
-		Plugin::getInstance()->avelonService->setSettings($params);
-		Craft::$app->getSession()->setNotice("Settings saved successfully.");
-	}
+    /**
+     * avelon/settings/save-settings action
+     *
+     */
+    public function actionSaveSettings()
+    {
+        $this->requireLogin();
+        $this->requirePostRequest();
+
+        $params = Craft::$app->request->getBodyParams();
+        Plugin::getInstance()->avelonService->setSettings($params);
+        Craft::$app->getSession()->setNotice("Settings saved successfully.");
+    }
 }
