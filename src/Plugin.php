@@ -32,7 +32,7 @@ class Plugin extends BasePlugin
     public static function config(): array
     {
         return [
-            'components' => ['settingsService' => SettingsService::class, 'avelonService' => AvelonService::class],
+            'components' => ['avelonService' => AvelonService::class],
         ];
     }
 
