@@ -2,7 +2,7 @@
 {% import '_includes/forms.twig' as forms %}
 
 {% if not currentUser.admin %}
-	{% exit 403 %}
+    {% exit 403 %}
 {% endif %}
 
 
@@ -11,25 +11,25 @@
 
 {% block content %}
 
-	{{ actionInput('avelon/settings/save-settings') }}
+    {{ actionInput('avelon/settings/save-settings') }}
     {{ redirectInput('avelon/settings/get-settings') }}
 
-	{{ forms.textField({
-		label: 'Account ID',
-		instructions: 'The ID of the account',
-		id: 'accountId',
-		name: 'accountId',
-		value: settings.accountId ?? null,
-		required: true
-	}) }}
+    {{ forms.textField({
+        label: 'Account ID',
+        instructions: 'The ID of the account',
+        id: 'accountId',
+        name: 'accountId',
+        value: settings.accountId ?? null,
+        required: true
+    }) }}
 
-	{{ forms.textField({
-		label: 'Bearer Token',
-		instructions: 'The Bearer Token',
-		id: 'bearerToken',
-		name: 'bearerToken',
-		value: settings.bearerToken ?? null,
-		required: true
-	}) }}
+    {{ forms.textField({
+        label: 'Bearer Token',
+        instructions: 'The Bearer Token',
+        id: 'bearerToken',
+        name: 'bearerToken',
+        value: settings.bearerToken ?? null,
+        required: true
+    }) }}
 
 {% endblock %}
