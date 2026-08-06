@@ -10,7 +10,7 @@ use craft\db\ActiveRecord;
  */
 class SettingsRecord extends ActiveRecord
 {
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%avelon_settings}}';
     }

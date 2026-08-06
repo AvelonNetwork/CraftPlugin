@@ -14,7 +14,7 @@ use avelonnetwork\craftavelon\Plugin;
 class SettingsController extends Controller
 {
     public $defaultAction = 'index';
-    protected array|int|bool $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
+    protected array|int|bool $allowAnonymous = false;
 
     /**
      * avelon/settings action
@@ -35,7 +35,7 @@ class SettingsController extends Controller
      * avelon/settings/save-settings action
      *
      */
-    public function actionSaveSettings()
+    public function actionSaveSettings(): ?Response
     {
         $this->requireLogin();
         $this->requirePostRequest();
@@ -43,5 +43,7 @@ class SettingsController extends Controller
         $params = Craft::$app->request->getBodyParams();
         Plugin::getInstance()->avelonService->setSettings($params);
         Craft::$app->getSession()->setNotice("Settings saved successfully.");
+
+        return null;
     }
 }

@@ -16,16 +16,14 @@ use yii\base\Event;
  * Avelon plugin
  *
  * @method static Plugin getInstance()
- * @method Settings getSettings()
  * @author Avelon Network <roland@avelonnetwork.com>
  * @copyright Avelon Network
  * @license MIT
- * @property-read SettingsService $settingsService
  * @property-read AvelonService $avelonService
  */
 class Plugin extends BasePlugin
 {
-    public string $schemaVersion = '1.0.0';
+    public string $schemaVersion = '1.0.5';
     public bool $hasCpSettings = false;
     public bool $hasCpSection = true;
 
@@ -36,14 +34,11 @@ class Plugin extends BasePlugin
         ];
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
-        // Defer most setup tasks until Craft is fully initialized
-        Craft::$app->onInit(function () {
-            $this->attachEventHandlers();
-        });
+        $this->attachEventHandlers();
 
         Event::on(
             UrlManager::class,
@@ -58,7 +53,8 @@ class Plugin extends BasePlugin
     {
         Event::on(
             View::class,
-            View::EVENT_BEFORE_RENDER_TEMPLATE,
+            // Changed from EVENT_BEFORE_RENDER_TEMPLATE to EVENT_BEFORE_RENDER_PAGE_TEMPLATE
+            View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
             function (TemplateEvent $event) {
                 if (!Craft::$app->getRequest()->getIsCpRequest()) {
                     $settings = $this->avelonService->getSettings();
@@ -66,7 +62,14 @@ class Plugin extends BasePlugin
                         $accountId = $settings['accountId'];
 
                         if ($accountId) {
-                            Craft::$app->view->registerJsFile('https://' . $accountId . '.avln.me/t.js', ['position' => Craft::$app->view::POS_HEAD, 'async' => true, 'defer' => true]);
+                            Craft::$app->view->registerJsFile(
+                                'https://' . $accountId . '.avln.me/t.js',
+                                [
+                                    'position' => View::POS_HEAD,
+                                    'async' => true,
+                                    'defer' => true
+                                ]
+                            );
                         }
                     }
                 }

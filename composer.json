@@ -1,15 +1,16 @@
 {
     "name": "avelon-network/avelon-network",
     "type": "craft-plugin",
-    "license": "mit",
+    "license": "MIT",
     "support": {
         "email": "hello@avelonetwork.com",
-        "issues": "https://github.com/git@github.com:avelonnetwork/craftplugin.git/issues?state=open",
-        "source": "https://github.com/git@github.com:avelonnetwork/craftplugin.git"
+        "issues": "https://github.com/AvelonNetwork/CraftPlugin/issues",
+        "source": "https://github.com/AvelonNetwork/CraftPlugin"
     },
     "require": {
-        "php": ">=8.0",
-        "craftcms/cms": "^4.0",
+        "php": "^8.0.2",
+        "craftcms/cms": "^4.0 || ^5.0",
+        "craftcms/commerce": "^4.0 || ^5.0",
         "guzzlehttp/guzzle": "^7.3"
     },
     "require-dev": {
